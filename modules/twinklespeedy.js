@@ -1448,6 +1448,7 @@ Twinkle.speedy.callbacks = {
 			}
 			appendText += ' ~~~~~\n';
 
+			usl.changeTags = Twinkle.changeTags;
 			usl.log(appendText, wgULS('记录对[[', '記錄對[[') + Morebits.pageNameNorm + wgULS(']]的快速删除提名', ']]的快速刪除提名'));
 		}
 	}
@@ -1638,7 +1639,7 @@ Twinkle.speedy.callback.evaluateSysop = function twinklespeedyCallbackEvaluateSy
 	var watchPage, promptForSummary;
 	normalizeds.forEach(function(norm) {
 		if (Twinkle.getPref('watchSpeedyPages').indexOf(norm) !== -1) {
-			watchPage = true;
+			watchPage = Twinkle.getPref('watchSpeedyExpiry');
 		}
 		if (Twinkle.getPref('promptForSpeedyDeletionSummary').indexOf(norm) !== -1) {
 			promptForSummary = true;
@@ -1689,7 +1690,7 @@ Twinkle.speedy.callback.evaluateUser = function twinklespeedyCallbackEvaluateUse
 	var watchPage = false;
 	$.each(normalizeds, function(index, norm) {
 		if (Twinkle.getPref('watchSpeedyPages').indexOf(norm) !== -1) {
-			watchPage = true;
+			watchPage = Twinkle.getPref('watchSpeedyExpiry');
 			return false;  // break
 		}
 	});

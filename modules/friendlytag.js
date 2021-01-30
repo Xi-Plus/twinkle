@@ -332,12 +332,26 @@ Twinkle.tag.updateSortOrder = function(e) {
 				};
 				break;
 			case 'Expert needed':
-				checkbox.subgroup = {
-					name: 'expert',
-					type: 'input',
-					label: wgULS('哪个领域的专家：', '哪個領域的專家：'),
-					tooltip: wgULS('可选，可参考 Category:需要专业人士关注的页面 使用现存的分类。', '可選，可參考 Category:需要專業人士關注的頁面 使用現存的分類。')
-				};
+				checkbox.subgroup = [
+					{
+						name: 'expert',
+						type: 'input',
+						label: wgULS('哪个领域的专家（必填）：', '哪個領域的專家（必填）：'),
+						tooltip: wgULS('必填，可参考 Category:需要专业人士关注的页面 使用现存的分类。', '必填，可參考 Category:需要專業人士關注的頁面 使用現存的分類。')
+					},
+					{
+						name: 'expert2',
+						type: 'input',
+						label: wgULS('哪个领域的专家：', '哪個領域的專家：'),
+						tooltip: wgULS('可选，可参考 Category:需要专业人士关注的页面 使用现存的分类。', '可選，可參考 Category:需要專業人士關注的頁面 使用現存的分類。')
+					},
+					{
+						name: 'expert3',
+						type: 'input',
+						label: wgULS('哪个领域的专家：', '哪個領域的專家：'),
+						tooltip: wgULS('可选，可参考 Category:需要专业人士关注的页面 使用现存的分类。', '可選，可參考 Category:需要專業人士關注的頁面 使用現存的分類。')
+					}
+				];
 				break;
 			case 'Merge':
 			case 'Merge from':
@@ -627,7 +641,7 @@ Twinkle.tag.article.tagList = wgULS({
 			{ tag: 'Unencyclopedic', description: '可能不适合写入百科全书' }
 		],
 		'信息和细节': [
-			{ tag: 'Expert needed', description: '需要精通或熟悉本主题的专业人士参与及协助编辑' },
+			{ tag: 'Expert needed', description: '需要精通或熟悉本主题的专业人士（专家）参与及协助编辑' },
 			{ tag: 'Overly detailed', description: '包含太多过度细节内容' },
 			{ tag: 'Trivia', description: '应避免有陈列杂项、琐碎资料的部分' }
 		],
@@ -650,6 +664,7 @@ Twinkle.tag.article.tagList = wgULS({
 			{ tag: 'BLPsources', description: '生者传记需要补充更多可供查证的来源' },
 			{ tag: 'BLP unsourced', description: '生者传记没有列出任何参考或来源' },
 			{ tag: 'Citecheck', description: '可能包含不适用或被曲解的引用资料，部分内容的准确性无法被证实' },
+			{ tag: 'More footnotes needed', description: '因为文内引用不足，部分字句的来源仍然不明' },
 			{ tag: 'No footnotes', description: '因为没有内文引用而来源仍然不明' },
 			{ tag: 'Onesource', description: '极大或完全地依赖于某个单一的来源' },
 			{ tag: 'Original research', description: '可能包含原创研究或未查证内容' },
@@ -730,7 +745,7 @@ Twinkle.tag.article.tagList = wgULS({
 			{ tag: 'Unencyclopedic', description: '可能不適合寫入百科全書' }
 		],
 		'資訊和細節': [
-			{ tag: 'Expert needed', description: '需要精通或熟悉本主題的專業人士參與及協助編輯' },
+			{ tag: 'Expert needed', description: '需要精通或熟悉本主題的專業人士（專家）參與及協助編輯' },
 			{ tag: 'Overly detailed', description: '包含太多過度細節內容' },
 			{ tag: 'Trivia', description: '應避免有陳列雜項、瑣碎資料的部分' }
 		],
@@ -753,6 +768,7 @@ Twinkle.tag.article.tagList = wgULS({
 			{ tag: 'BLPsources', description: '生者傳記需要補充更多可供查證的來源' },
 			{ tag: 'BLP unsourced', description: '生者傳記沒有列出任何參考或來源' },
 			{ tag: 'Citecheck', description: '可能包含不適用或被曲解的引用資料，部分內容的準確性無法被證實' },
+			{ tag: 'More footnotes needed', description: '因為文內引用不足，部分字句的來源仍然不明' },
 			{ tag: 'No footnotes', description: '因為沒有內文引用而來源仍然不明' },
 			{ tag: 'Onesource', description: '極大或完全地依賴於某個單一的來源' },
 			{ tag: 'Original research', description: '可能包含原創研究或未查證內容' },
@@ -1227,8 +1243,12 @@ Twinkle.tag.callbacks = {
 						currentTag += '|1=' + params.expandLanguage;
 						break;
 					case 'Expert needed':
-						if (params.expert) {
-							currentTag += '|subject=' + params.expert;
+						currentTag += '|subject=' + params.expert;
+						if (params.expert2) {
+							currentTag += '|subject2=' + params.expert2;
+						}
+						if (params.expert3) {
+							currentTag += '|subject3=' + params.expert3;
 						}
 						break;
 					case 'Merge':
@@ -1666,6 +1686,9 @@ Twinkle.tag.callback.evaluate = function friendlytagCallbackEvaluate(e) {
 				return;
 			}
 			if (checkParameter('Missing information', 'missingInformation', wgULS('缺少的内容', '缺少的內容'))) {
+				return;
+			}
+			if (checkParameter('Expert needed', 'expert', wgULS('专家领域', '專家領域'))) {
 				return;
 			}
 			break;
