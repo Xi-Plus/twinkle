@@ -229,6 +229,7 @@ body .ui-dialog.morebits-dialog .ui-dialog-titlebar {
 
 .ui-dialog.morebits-dialog .morebits-dialog-content {
 	padding: 0;
+	overflow-y: hidden;
 }
 
 body .ui-dialog.morebits-dialog .ui-dialog-buttonpane {
