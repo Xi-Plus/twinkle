@@ -81,7 +81,7 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 						// enable multiple
 						cForm.multiple.checked = false;
 						// enable requesting creation protection
-						cForm.salting.checked = false;
+						// l10n: no salting now
 
 						Twinkle.speedy.callback.modeChanged(cForm);
 
