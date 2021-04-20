@@ -289,7 +289,9 @@ Twinkle.speedy.callback.modeChanged = function twinklespeedyCallbackModeChanged(
 				break;
 
 			case 3:  // user talk
-				appendList(wgULS('用户讨论页', '使用者討論頁'), Twinkle.speedy.usertalkList);
+				if (mw.util.isIPAddress(mw.config.get('wgRelevantUserName'))) {
+					appendList(wgULS('用户讨论页', '使用者討論頁'), Twinkle.speedy.usertalkList);
+				}
 				break;
 
 			case 6:  // file
@@ -620,6 +622,14 @@ Twinkle.speedy.userList = [
 		label: wgULS('O1: 用户请求删除自己的用户页或其子页面。', 'O1: 使用者請求刪除自己的使用者頁面或其子頁面。'),
 		value: 'o1',
 		tooltip: wgULS('如果是从其他名字空间移动来的，须附有合理原因。', '如果是從其他命名空間移動來的，須附有合理原因。')
+	}
+];
+
+Twinkle.speedy.usertalkList = [
+	{
+		label: wgULS('O3: 已超过一个月未有编辑动作的匿名（IP）用户的用户讨论页', 'O3: 已超過一個月未有編輯動作的匿名（IP）使用者的使用者討論頁'),
+		value: 'o3',
+		tooltip: wgULS('避免给使用同一IP地址的用户带来混淆。不适用于用户讨论页的存档页面。', '避免給使用同一IP位址的使用者帶來混淆。不適用於使用者討論頁的存檔頁面。')
 	}
 ];
 
