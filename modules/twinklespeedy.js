@@ -276,47 +276,39 @@ Twinkle.speedy.callback.modeChanged = function twinklespeedyCallbackModeChanged(
 		appendList(wgULS('自定义理由', '自訂理由'), Twinkle.speedy.customRationale);
 	}
 
-	// l10n: no talkList
+	// l10n
+	switch (namespace) {
+		case 0:  // article
+			appendList(wgULS('条目', '條目'), Twinkle.speedy.articleList);
+			break;
 
-	if (!Morebits.isPageRedirect()) {
-		switch (namespace) {
-			case 0:  // article
-				appendList(wgULS('条目', '條目'), Twinkle.speedy.articleList);
-				break;
-
-			case 2:  // user
-				appendList(wgULS('用户页', '使用者頁面'), Twinkle.speedy.userList);
-				break;
-
-			case 3:  // user talk
-				if (mw.util.isIPAddress(mw.config.get('wgRelevantUserName'))) {
-					appendList(wgULS('用户讨论页', '使用者討論頁'), Twinkle.speedy.usertalkList);
-				}
-				break;
-
-			case 6:  // file
-				appendList(wgULS('文件', '檔案'), Twinkle.speedy.fileList);
-				if (!mode.isSysop) {
-					work_area.append({ type: 'div', label: wgULS('标记CSD F3、F4、F6、F8、F9、F10，请使用Twinkle的“图权”功能。', '標記CSD F3、F4、F6、F8、F9、F10，請使用Twinkle的「圖權」功能。') });
-				}
-				break;
-
-			case 14:  // category
-				appendList(wgULS('分类', '分類'), Twinkle.speedy.categoryList);
-				break;
-
-			case 118:  // draft
-				appendList('草稿', Twinkle.speedy.draftList);
-				break;
-
-			default:
-				break;
-		}
-	} else {
-		if (namespace === 2 || namespace === 3) {
+		case 2:  // user
 			appendList(wgULS('用户页', '使用者頁面'), Twinkle.speedy.userList);
-		}
-		appendList(wgULS('重定向', '重新導向'), Twinkle.speedy.redirectList);
+			break;
+
+		case 3:  // user talk
+			if (mw.util.isIPAddress(mw.config.get('wgRelevantUserName'))) {
+				appendList(wgULS('用户讨论页', '使用者討論頁'), Twinkle.speedy.usertalkList);
+			}
+			break;
+
+		case 6:  // file
+			appendList(wgULS('文件', '檔案'), Twinkle.speedy.fileList);
+			if (!mode.isSysop) {
+				work_area.append({ type: 'div', label: wgULS('标记CSD F3、F4、F6、F8、F9、F10，请使用Twinkle的“图权”功能。', '標記CSD F3、F4、F6、F8、F9、F10，請使用Twinkle的「圖權」功能。') });
+			}
+			break;
+
+		case 14:  // category
+			appendList(wgULS('分类', '分類'), Twinkle.speedy.categoryList);
+			break;
+
+		case 118:  // draft
+			appendList('草稿', Twinkle.speedy.draftList);
+			break;
+
+		default:
+			break;
 	}
 
 	var generalCriteria = Twinkle.speedy.generalList;
@@ -326,6 +318,10 @@ Twinkle.speedy.callback.modeChanged = function twinklespeedyCallbackModeChanged(
 		generalCriteria = Twinkle.speedy.customRationale.concat(generalCriteria);
 	}
 	appendList(wgULS('通用准则', '通用準則'), generalCriteria);
+
+	if (Morebits.isPageRedirect() || mode.isSysop) {
+		appendList(wgULS('重定向', '重新導向'), Twinkle.speedy.redirectList);
+	}
 
 	var old_area = Morebits.quickForm.getElements(form, 'work_area')[0];
 	form.replaceChild(work_area.render(), old_area);
@@ -341,6 +337,12 @@ Twinkle.speedy.callback.modeChanged = function twinklespeedyCallbackModeChanged(
 			}
 			customOption.subgroup.querySelector('input').value = decodeURIComponent($('#delete-reason').text()).replace(/\+/g, ' ');
 		}
+	}
+
+	// l10n: enlarge G11 radio/checkbox and its label
+	if (document.querySelector('input[value="g11"]') && Twinkle.getPref('enlargeG11Input')) {
+		document.querySelector('input[value="g11"]').style = 'height: 2em; width: 2em; height: -moz-initial; width: -moz-initial; -moz-transform: scale(2); -o-transform: scale(2);';
+		document.querySelector('input[value="g11"]').labels[0].style = 'font-size: 1.5em; line-height: 1.5em;';
 	}
 };
 
@@ -936,7 +938,7 @@ Twinkle.speedy.callbacks = {
 				notifytext = '\n{{subst:db-notice|target=' + Morebits.pageNameNorm + '}}--~~~~';
 
 				editsummary = '通知：';
-				if (params.normalizeds.indexOf('g12') === -1) {  // no article name in summary for G10 taggings
+				if (params.normalizeds.indexOf('g12') === -1) {  // l10n: no article name in summary for G12 taggings
 					editsummary += '页面[[' + Morebits.pageNameNorm + ']]';
 				} else {
 					editsummary += '一攻击性页面';
@@ -1051,8 +1053,28 @@ Twinkle.speedy.callbacks = {
 				wikipedia_api.post();
 			}
 
-			// promote Unlink tool
+			// l10n: prompt for protect on G11
 			var $link, $bigtext;
+			if (params.normalized === 'g11') {
+				$link = $('<a/>', {
+					href: '#',
+					text: wgULS('单击这里施行保护', '點擊這裡施行保護'),
+					css: { fontSize: '130%', fontWeight: 'bold' },
+					click: function() {
+						Morebits.wiki.actionCompleted.redirect = null;
+						Twinkle.speedy.dialog.close();
+						mw.config.set('wgArticleId', 0);
+						Twinkle.protect.callback();
+					}
+				});
+				$bigtext = $('<span/>', {
+					text: wgULS('白纸保护该页', '白紙保護該頁'),
+					css: { fontSize: '130%', fontWeight: 'bold' }
+				});
+				Morebits.status.info($bigtext[0], $link[0]);
+			}
+
+			// promote Unlink tool
 			if (mw.config.get('wgNamespaceNumber') === 6 && params.normalized !== 'f7') {
 				$link = $('<a/>', {
 					href: '#',
@@ -1564,9 +1586,7 @@ Twinkle.speedy.callback.evaluateUser = function twinklespeedyCallbackEvaluateUse
 		return Twinkle.getPref('notifyUserOnSpeedyDeletionNomination').indexOf(norm) !== -1 &&
 			!(norm === 'g6' && values[index] !== 'copypaste');
 	});
-	var welcomeuser = notifyuser && normalizeds.some(function(norm) {
-		return Twinkle.getPref('welcomeUserOnSpeedyDeletionNotification').indexOf(norm) !== -1;
-	});
+	// l10n: no welcomeuser now
 	var csdlog = Twinkle.getPref('logSpeedyNominations') && normalizeds.some(function(norm) {
 		return Twinkle.getPref('noLogOnSpeedyNomination').indexOf(norm) === -1;
 	});
@@ -1586,7 +1606,7 @@ Twinkle.speedy.callback.evaluateUser = function twinklespeedyCallbackEvaluateUse
 		normalizeds: normalizeds,
 		watch: watchPage,
 		usertalk: notifyuser,
-		welcomeuser: welcomeuser,
+		welcomeuser: null, // l10n: no welcomeuser now
 		lognomination: csdlog,
 		// l10n: no requestsalt now
 		templateParams: templateParams,

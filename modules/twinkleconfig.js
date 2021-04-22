@@ -439,6 +439,15 @@ Twinkle.config.sections = [
 				type: 'boolean'
 			},
 
+			// TwinkleConfig.watchSpeedyUser (string)
+			// The watchlist setting of the user talk page if they receive a notification.
+			{
+				name: 'watchSpeedyUser',
+				label: wgULS('加入创建者讨论页到监视列表（在通知时）', '加入建立者討論頁到監視清單（在通知時）'),
+				type: 'enum',
+				enumValues: Twinkle.config.watchlistEnums
+			},
+
 			// TwinkleConfig.notifyUserOnSpeedyDeletionNomination (array)
 			// What types of actions should result that the author of the page being notified of nomination
 			{
@@ -450,33 +459,14 @@ Twinkle.config.sections = [
 				setDisplayOrder: Twinkle.config.commonSets.csdCriteriaNotificationDisplayOrder
 			},
 
-			// TwinkleConfig.welcomeUserOnSpeedyDeletionNotification (array of strings)
-			// On what types of speedy deletion notifications shall the user be welcomed
-			// with a "firstarticle" notice if his talk page has not yet been created.
-			{
-				name: 'welcomeUserOnSpeedyDeletionNotification',
-				label: wgULS('在使用以下理由时欢迎页面创建者', '在使用以下理由時歡迎頁面建立者'),
-				helptip: wgULS('欢迎模板仅在用户被通知时加入，使用的模板是{{firstarticle}}。', '歡迎模板僅在使用者被通知時加入，使用的模板是{{firstarticle}}。'),
-				type: 'set',
-				setValues: Twinkle.config.commonSets.csdCriteriaNotification,
-				setDisplayOrder: Twinkle.config.commonSets.csdCriteriaNotificationDisplayOrder
-			},
+			// l10n: no welcomeUserOnSpeedyDeletionNotification now
+
+			// l10n: no warnUserOnSpeedyDelete now
 
 			// TwinkleConfig.promptForSpeedyDeletionSummary (array of strings)
 			{
 				name: 'promptForSpeedyDeletionSummary',
 				label: wgULS('使用以下理由删除时允许编辑删除理由', '使用以下理由刪除時允許編輯刪除理由'),
-				adminOnly: true,
-				type: 'set',
-				setValues: Twinkle.config.commonSets.csdAndDICriteria,
-				setDisplayOrder: Twinkle.config.commonSets.csdAndDICriteriaDisplayOrder
-			},
-
-			// TwinkleConfig.openUserTalkPageOnSpeedyDelete (array of strings)
-			// What types of actions that should result user talk page to be opened when speedily deleting (admin only)
-			{
-				name: 'openUserTalkPageOnSpeedyDelete',
-				label: wgULS('使用以下理由时打开用户讨论页', '使用以下理由時打開使用者討論頁'),
 				adminOnly: true,
 				type: 'set',
 				setValues: Twinkle.config.commonSets.csdAndDICriteria,

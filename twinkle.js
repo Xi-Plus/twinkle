@@ -101,12 +101,13 @@ Twinkle.defaultConfig = {
 	watchSpeedyPages: [ ],
 	watchSpeedyExpiry: 'yes',
 	markSpeedyPagesAsPatrolled: true,
+	watchSpeedyUser: '1 month',
 
 	// these next two should probably be identical by default
+	// l10n: no welcomeUserOnSpeedyDeletionNotification now
 	notifyUserOnSpeedyDeletionNomination: [ 'db', 'g1', 'g2', 'g3', 'g5', 'g11', 'g12', 'g13', 'g16', 'a1', 'a2', 'a5', 'a6', 'f6', 'r2', 'r3', 'r7' ],
-	welcomeUserOnSpeedyDeletionNotification: [ 'db', 'g1', 'g2', 'g3', 'g5', 'g11', 'g12', 'g13', 'g16', 'a1', 'a2', 'a5', 'a6', 'f6', 'r2', 'r3', 'r7' ],
+	// l10n: no warnUserOnSpeedyDelete now
 	promptForSpeedyDeletionSummary: [],
-	openUserTalkPageOnSpeedyDelete: [ ],
 	deleteTalkPageOnDelete: true,
 	deleteRedirectsOnDelete: true,
 	deleteSysopDefaultToDelete: false,
@@ -115,7 +116,7 @@ Twinkle.defaultConfig = {
 	logSpeedyNominations: false,
 	speedyLogPageName: 'CSD日志',
 	noLogOnSpeedyNomination: [ 'o1' ],
-	enlargeG11Input: false,
+	enlargeG11Input: false, // l10n
 
 	// Unlink
 	unlinkNamespaces: [ '0', '10', '100', '102', '118' ],
