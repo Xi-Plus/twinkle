@@ -77,7 +77,7 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 						// enable notify checkbox
 						cForm.notify.checked = cChecked;
 						// enable deletion notification checkbox
-						cForm.warnusertalk.checked = !cChecked && !Twinkle.speedy.hasCSD;
+						// l10n: no warnusertalk now
 						// enable multiple
 						cForm.multiple.checked = false;
 						// enable requesting creation protection
@@ -138,17 +138,8 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 						Twinkle.speedy.callback.modeChanged(event.target.form);
 						event.stopPropagation();
 					}
-				},
-				{
-					label: wgULS('通知创建者页面已被删除', '通知建立者頁面已被刪除'),
-					value: 'warnusertalk',
-					name: 'warnusertalk',
-					tooltip: wgULS('如果您在参数设置启用了该准则的通知且勾选本选项，一个通知模板将会被加入创建者的讨论页。', '如果您在偏好設定啟用了該準則的通知且勾選本選項，一個通知模板將會被加入建立者的討論頁。'),
-					checked: !Twinkle.speedy.hasCSD,
-					event: function(event) {
-						event.stopPropagation();
-					}
 				}
+				// l10n: no warnusertalk now
 			]
 		});
 	}
