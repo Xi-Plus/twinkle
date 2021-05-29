@@ -253,19 +253,24 @@ Twinkle.warn.callback = function twinklewarnCallback() {
 		}
 	}
 
-	var init = function() {
-		// We must init the first choice (General Note);
-		var evt = document.createEvent('Event');
-		evt.initEvent('change', true, true);
-		result.main_group.dispatchEvent(evt);
-	};
 
-	Morebits.wiki.flow.check('User_talk:' + Morebits.wiki.flow.relevantUserName(), function () {
-		Twinkle.warn.isFlow = true;
-		init();
-	}, function () {
-		Twinkle.warn.isFlow = false;
-		init();
+	// init after user info fetched
+	Twinkle.block.fetchUserInfo(function() {
+		var init = function() {
+			// We must init the first choice (General Note);
+			var evt = document.createEvent('Event');
+			evt.initEvent('change', true, true);
+			result.main_group.dispatchEvent(evt);
+		};
+
+		Morebits.wiki.flow.check('User_talk:' + Morebits.wiki.flow.relevantUserName(), function () {
+			Twinkle.warn.isFlow = true;
+			init();
+		}, function () {
+			Twinkle.warn.isFlow = false;
+			init();
+		});
+
 	});
 };
 
@@ -2640,19 +2645,72 @@ Twinkle.warn.callback.evaluate = function twinklewarnCallbackEvaluate(e) {
 	Morebits.simpleWindow.setButtonsEnabled(false);
 	Morebits.status.init(e.target);
 
-	Morebits.wiki.actionCompleted.redirect = userTalkPage;
-	Morebits.wiki.actionCompleted.notice = wgULS('警告完成，将在几秒后刷新', '警告完成，將在幾秒後重新整理');
-
-	if (Twinkle.warn.isFlow) {
-		var flow_page = new Morebits.wiki.flow(userTalkPage, wgULS('用户Flow讨论页留言', '使用者Flow討論頁留言'));
-		flow_page.setCallbackParameters(params);
-		Twinkle.warn.callbacks.main_flow(flow_page);
+	var query = {
+		format: 'json',
+		action: 'query',
+		list: 'blocks|logevents',
+		letype: 'block',
+		lelimit: 1,
+		letitle: 'User:' + Morebits.wiki.flow.relevantUserName()
+	};
+	if (Morebits.isIPRange(Morebits.wiki.flow.relevantUserName())) {
+		query.bkip = Morebits.wiki.flow.relevantUserName();
 	} else {
-		var wikipedia_page = new Morebits.wiki.page(userTalkPage, wgULS('用户讨论页修改', '使用者討論頁修改'));
-		wikipedia_page.setCallbackParameters(params);
-		wikipedia_page.setFollowRedirect(true, false);
-		wikipedia_page.load(Twinkle.warn.callbacks.main);
+		query.bkusers = Morebits.wiki.flow.relevantUserName();
 	}
+
+	new mw.Api().get(query).then(function(data) {
+		var block = data.query.blocks[0];
+		var logevents = data.query.logevents[0];
+		var logid = data.query.logevents.length ? logevents.logid : false;
+
+		if (logid !== Twinkle.block.blockLogId || !!block !== !!Twinkle.block.currentBlockInfo) {
+			var message = mw.config.get('wgRelevantUserName') + wgULS('的封禁状态已被修改。', '的封鎖狀態已被修改。');
+			if (block) {
+				message += wgULS('新状态：', '新狀態：');
+			} else {
+				message += wgULS('最新日志：', '最新日誌：');
+			}
+
+			var logExpiry = '';
+			var blockActionText = {
+				'block': wgULS('封禁', '封鎖'),
+				'reblock': wgULS('重新封禁', '重新封鎖'),
+				'unblock': wgULS('解除封禁', '解除封鎖')
+			};
+
+			if (logevents.params.duration) {
+				if (logevents.params.duration === 'infinity') {
+					logExpiry = wgULS('无限期', '無限期');
+				} else {
+					var expiryDate = new Morebits.date(logevents.params.expiry);
+					logExpiry += '到' + expiryDate.calendar();
+				}
+			} else { // no duration, action=unblock, just show timestamp
+				logExpiry = '於' + new Morebits.date(logevents.timestamp).calendar();
+			}
+			message += '由' + logevents.user + wgULS('以“', '以「') + logevents.comment + wgULS('”', '」') +
+				blockActionText[logevents.action] + logExpiry + wgULS('，你想要继续发送警告吗？', '，你想要繼續發送警告嗎？');
+
+			if (!confirm(message)) {
+				Morebits.status.error(wgULS('发送警告', '發送警告'), wgULS('用户取消操作', '使用者取消操作'));
+				return;
+			}
+		}
+		Morebits.wiki.actionCompleted.redirect = userTalkPage;
+		Morebits.wiki.actionCompleted.notice = wgULS('警告完成，将在几秒后刷新', '警告完成，將在幾秒後重新整理');
+
+		if (Twinkle.warn.isFlow) {
+			var flow_page = new Morebits.wiki.flow(userTalkPage, wgULS('用户Flow讨论页留言', '使用者Flow討論頁留言'));
+			flow_page.setCallbackParameters(params);
+			Twinkle.warn.callbacks.main_flow(flow_page);
+		} else {
+			var wikipedia_page = new Morebits.wiki.page(userTalkPage, wgULS('用户讨论页修改', '使用者討論頁修改'));
+			wikipedia_page.setCallbackParameters(params);
+			wikipedia_page.setFollowRedirect(true, false);
+			wikipedia_page.load(Twinkle.warn.callbacks.main);
+		}
+	});
 };
 
 Twinkle.addInitCallback(Twinkle.warn, 'warn');
