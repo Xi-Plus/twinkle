@@ -1,4 +1,5 @@
 {
+	"parser": "babel-eslint",
 	"plugins": ["es5"],
 	"extends": ["eslint:recommended", "plugin:es5/no-es2015"],
 	"root": true,

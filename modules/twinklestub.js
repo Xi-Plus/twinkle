@@ -198,87 +198,53 @@ Twinkle.stub.article = {};
 // A list of all article tags, in alphabetical order
 // To ensure tags appear in the default "categorized" view, add them to the tagCategories hash below.
 
-Twinkle.stub.article.tags = wgULS({
-	'actor-stub': '演员',
-	'asia-stub': '亚洲',
+Twinkle.stub.article.tags = {
+	'actor-stub': wgULS('演员', '演員'),
+	'asia-stub': wgULS('亚洲', '亞洲'),
 	'bio-stub': '人物',
-	'biology-stub': '生物学',
-	'chem-stub': '化学',
-	'europe-stub': '欧洲',
+	'biology-stub': wgULS('生物学', '生物學'),
+	'chem-stub': wgULS('化学', '化學'),
+	'europe-stub': wgULS('欧洲', '歐洲'),
 	'expand list': '未完成列表',
 	'food-stub': '食物',
-	'france-geo-stub': '法国地理',
+	'france-geo-stub': wgULS('法国地理', '法國地理'),
 	'geo-stub': '地理位置',
-	'hist-stub': '历史或历史学',
+	'hist-stub': wgULS('历史或历史学', '歷史或歷史學'),
 	'JP-stub': '日本',
-	'lit-stub': '文学',
-	'math-stub': '数学',
-	'med-stub': '医学',
-	'mil-stub': '军事',
-	'movie-stub': '电影',
-	'music-stub': '音乐',
-	'physics-stub': '物理学',
+	'lit-stub': wgULS('文学', '文學'),
+	'math-stub': wgULS('数学', '數學'),
+	'med-stub': wgULS('医学', '醫學'),
+	'mil-stub': wgULS('军事', '軍事'),
+	'movie-stub': wgULS('电影', '電影'),
+	'music-stub': wgULS('音乐', '音樂'),
+	'physics-stub': wgULS('物理学', '物理學'),
 	'politic-stub': '政治',
 	'religion-stub': '宗教',
-	'science-stub': '科学',
-	'sport-stub': '体育',
+	'science-stub': wgULS('科学', '科學'),
+	'sport-stub': wgULS('体育', '體育'),
 	'stub': '通用小作品',
 	'switzerland-stub': '瑞士',
 	'tech-stub': '科技',
 	'transp-stub': '交通',
-	'TV-stub': '电视',
-	'UK-stub': '英国',
-	'US-bio-stub': '美国人物',
-	'US-geo-stub': '美国地理',
-	'US-stub': '美国',
-	'weather-stub': '天气和特别的天气事件'
-}, {
-	'actor-stub': '演員',
-	'asia-stub': '亞洲',
-	'bio-stub': '人物',
-	'biology-stub': '生物學',
-	'chem-stub': '化學',
-	'europe-stub': '歐洲',
-	'expand list': '未完成列表',
-	'food-stub': '食物',
-	'france-geo-stub': '法國地理',
-	'geo-stub': '地理位置',
-	'hist-stub': '歷史或歷史學',
-	'JP-stub': '日本',
-	'lit-stub': '文學',
-	'math-stub': '數學',
-	'med-stub': '醫學',
-	'mil-stub': '軍事',
-	'movie-stub': '電影',
-	'music-stub': '音樂',
-	'physics-stub': '物理學',
-	'politic-stub': '政治',
-	'religion-stub': '宗教',
-	'science-stub': '科學',
-	'sport-stub': '體育',
-	'stub': '通用小作品',
-	'switzerland-stub': '瑞士',
-	'tech-stub': '科技',
-	'transp-stub': '交通',
-	'TV-stub': '電視',
-	'UK-stub': '英國',
-	'US-bio-stub': '美國人物',
-	'US-geo-stub': '美國地理',
-	'US-stub': '美國',
-	'weather-stub': '天氣和特別的天氣事件'
-});
+	'TV-stub': wgULS('电视', '電視'),
+	'UK-stub': wgULS('英国', '英國'),
+	'US-bio-stub': wgULS('美国人物', '美國人物'),
+	'US-geo-stub': wgULS('美国地理', '美國地理'),
+	'US-stub': wgULS('美国', '美國'),
+	'weather-stub': wgULS('天气和特别的天气事件', '天氣和特別的天氣事件')
+};
 
 // A list of tags in order of category
 // Tags should be in alphabetical order within the categories
 // Add new categories with discretion - the list is long enough as is!
 
 /* eslint-disable quote-props */
-Twinkle.stub.article.tagCategories = wgULS({
+Twinkle.stub.article.tagCategories = {
 	'通用模板': [
 		'stub',
 		'expand list'
 	],
-	'国家和地理': [
+	[wgULS('国家和地理', '國家和地理')]: [
 		'asia-stub',
 		'europe-stub',
 		'france-geo-stub',
@@ -290,7 +256,7 @@ Twinkle.stub.article.tagCategories = wgULS({
 		'US-geo-stub',
 		'US-stub'
 	],
-	'杂项': [
+	[wgULS('杂项', '雜項')]: [
 		'food-stub',
 		'hist-stub',
 		'mil-stub',
@@ -303,7 +269,7 @@ Twinkle.stub.article.tagCategories = wgULS({
 		'bio-stub',
 		'US-bio-stub'
 	],
-	'科学': [
+	[wgULS('科学', '科學')]: [
 		'biology-stub',
 		'chem-stub',
 		'math-stub',
@@ -312,72 +278,20 @@ Twinkle.stub.article.tagCategories = wgULS({
 		'science-stub',
 		'weather-stub'
 	],
-	'体育': [
+	[wgULS('体育', '體育')]: [
 		'sport-stub'
 	],
-	'技术': [
+	[wgULS('技术', '技術')]: [
 		'tech-stub'
 	],
-	'艺术': [
+	[wgULS('艺术', '藝術')]: [
 		'actor-stub',
 		'lit-stub',
 		'movie-stub',
 		'music-stub',
 		'TV-stub'
 	]
-}, {
-	'通用模板': [
-		'stub',
-		'expand list'
-	],
-	'國家和地理': [
-		'asia-stub',
-		'europe-stub',
-		'france-geo-stub',
-		'geo-stub',
-		'JP-stub',
-		'switzerland-stub',
-		'UK-stub',
-		'US-bio-stub',
-		'US-geo-stub',
-		'US-stub'
-	],
-	'雜項': [
-		'food-stub',
-		'hist-stub',
-		'mil-stub',
-		'politic-stub',
-		'religion-stub',
-		'transp-stub'
-	],
-	'人物': [
-		'actor-stub',
-		'bio-stub',
-		'US-bio-stub'
-	],
-	'科學': [
-		'biology-stub',
-		'chem-stub',
-		'math-stub',
-		'med-stub',
-		'physics-stub',
-		'science-stub',
-		'weather-stub'
-	],
-	'體育': [
-		'sport-stub'
-	],
-	'技術': [
-		'tech-stub'
-	],
-	'藝術': [
-		'actor-stub',
-		'lit-stub',
-		'movie-stub',
-		'music-stub',
-		'TV-stub'
-	]
-});
+};
 /* eslint-enable quote-props */
 
 // Tags for REDIRECTS start here
